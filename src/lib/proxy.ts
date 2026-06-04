@@ -8,6 +8,7 @@ import {
 } from "./instances";
 import { mergeResults, type InstanceResult } from "./merge";
 import { isMethodAllowed, requiredScope } from "./scope";
+import { getAccessToken } from "./simorg-token";
 
 // The generic SimOrg reverse proxy.
 //
@@ -31,7 +32,25 @@ interface ForwardResult {
   bodyBytes: ArrayBuffer;
 }
 
-/** Forward a single request to one SimOrg instance. */
+function errorResult(instance: Instance, status: number, detail: string): ForwardResult {
+  const bytes = new TextEncoder().encode(
+    JSON.stringify({ error: `SimOrg ${instance} request failed`, detail }),
+  );
+  return {
+    instance,
+    status,
+    ok: false,
+    headers: new Headers({ "content-type": "application/json; charset=utf-8" }),
+    bodyBytes: bytes.buffer as ArrayBuffer,
+  };
+}
+
+/**
+ * Forward a single request to one SimOrg instance, authenticating with an
+ * OAuth2 client-credentials access token. Never throws: upstream/token
+ * failures are returned as a 502 ForwardResult so that an `ALL` call can still
+ * succeed on the other instance.
+ */
 async function forwardToInstance(
   instance: Instance,
   path: string,
@@ -40,27 +59,28 @@ async function forwardToInstance(
   headers: Headers,
   body: ArrayBuffer | undefined,
 ): Promise<ForwardResult> {
-  const cfg = getInstanceConfig(instance);
-  const target = `${cfg.baseUrl}/${path}${search ? `?${search}` : ""}`;
+  try {
+    const cfg = getInstanceConfig(instance);
+    const accessToken = await getAccessToken(instance);
+    const target = `${cfg.baseUrl}/${path}${search ? `?${search}` : ""}`;
 
-  const upstreamHeaders = new Headers(headers);
-  upstreamHeaders.set(cfg.authHeader, `${cfg.authScheme}${cfg.token}`);
+    const upstreamHeaders = new Headers(headers);
+    upstreamHeaders.set("authorization", `Bearer ${accessToken}`);
 
-  // Follow redirects (default): `redirect: "manual"` would yield an opaque
-  // response (status 0, empty body) and silently corrupt any 3xx from SimOrg.
-  const resp = await fetch(target, {
-    method,
-    headers: upstreamHeaders,
-    body,
-  });
+    // Follow redirects (default): `redirect: "manual"` would yield an opaque
+    // response (status 0, empty body) and silently corrupt any 3xx from SimOrg.
+    const resp = await fetch(target, { method, headers: upstreamHeaders, body });
 
-  return {
-    instance,
-    status: resp.status,
-    ok: resp.ok,
-    headers: resp.headers,
-    bodyBytes: await resp.arrayBuffer(),
-  };
+    return {
+      instance,
+      status: resp.status,
+      ok: resp.ok,
+      headers: resp.headers,
+      bodyBytes: await resp.arrayBuffer(),
+    };
+  } catch (err) {
+    return errorResult(instance, 502, err instanceof Error ? err.message : String(err));
+  }
 }
 
 function parseBody(result: ForwardResult): unknown {

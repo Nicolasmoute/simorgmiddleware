@@ -34,8 +34,10 @@ client ──API key──▶  middleware  ──instance token──▶  SimOrg
   is HTTP-method based: `GET`/`HEAD`/`OPTIONS` are reads; everything else needs
   `WRITE`. Only admins issue or upgrade `WRITE` keys.
 - **Instance selection.** Pass `?instance=FR|SA|ALL` (or the
-  `x-simorg-instance` header). The middleware forwards to the matching instance
-  using that instance's full-access SimOrg token (kept server-side only).
+  `x-simorg-instance` header). The middleware forwards to the matching
+  instance, authenticating to SimOrg with an OAuth2 client-credentials access
+  token it obtains and caches per instance (client id/secret kept server-side
+  only).
 - **`ALL` merge.** Both instances are queried concurrently. Because FR and SA
   are independent databases whose ids can collide, every returned object is
   tagged with `_instance` (`"FR"` / `"SA"`). List responses are flattened into
@@ -137,10 +139,13 @@ See [`.env.example`](./.env.example). Key variables:
 
 | Variable | Purpose |
 | --- | --- |
-| `DATABASE_URL` | SQLite location (use a persistent volume on Zeabur) |
-| `SIMORG_FR_BASE_URL` / `SIMORG_SA_BASE_URL` | Public API base URL per instance |
-| `SIMORG_FR_TOKEN` / `SIMORG_SA_TOKEN` | Full-access SimOrg token per instance (server-side only) |
-| `SIMORG_AUTH_HEADER` / `SIMORG_AUTH_SCHEME` | How tokens are presented to SimOrg (default `Authorization: Bearer …`) |
+| `DATABASE_URL` | SQLite location. Defaults to `file:/app/prisma/prod.db` if unset; **use a persistent volume on Zeabur** (e.g. `file:/data/simorg.db`) or keys are lost on redeploy |
+| `SIMORG_FR_BASE_URL` / `SIMORG_SA_BASE_URL` | API base URL per instance |
+| `SIMORG_FR_CLIENT_ID` / `SIMORG_SA_CLIENT_ID` | OAuth2 client id per instance (server-side only) |
+| `SIMORG_FR_CLIENT_SECRET` / `SIMORG_SA_CLIENT_SECRET` | OAuth2 client secret per instance (server-side only) |
+| `SIMORG_FR_TOKEN_URL` / `SIMORG_SA_TOKEN_URL` | OAuth2 token endpoint per instance |
+| `SIMORG_SCOPE` | OAuth2 scope (default `application`) |
+| `SIMORG_TOKEN_URL` | Fallback token endpoint if a per-instance one is unset |
 | `ADMIN_EMAILS` | Comma-separated admin emails |
 | `ADMIN_TOKEN` | Shared secret guarding `/api/admin/*` (unset ⇒ admin API disabled) |
 | `DEFAULT_KEY_LIFETIME_MONTHS` | Default key lifetime (3) |

@@ -1,4 +1,8 @@
 // SimOrg instance configuration and request-target selection.
+//
+// SimOrg authenticates via OAuth2 client-credentials: per instance we hold a
+// client id/secret and a token endpoint, exchange them for a short-lived
+// access token (see simorg-token.ts), and call the API with that bearer token.
 
 export const INSTANCES = ["FR", "SA"] as const;
 export type Instance = (typeof INSTANCES)[number];
@@ -9,9 +13,10 @@ export type InstanceParam = Instance | "ALL";
 export interface InstanceConfig {
   instance: Instance;
   baseUrl: string;
-  token: string;
-  authHeader: string;
-  authScheme: string;
+  clientId: string;
+  clientSecret: string;
+  tokenUrl: string;
+  scope: string;
 }
 
 function requireEnv(name: string): string {
@@ -22,16 +27,32 @@ function requireEnv(name: string): string {
   return value;
 }
 
-/** Resolve the SimOrg base URL + credentials for one instance from env. */
+/**
+ * Resolve the SimOrg base URL + OAuth credentials for one instance from env.
+ * Env names (per instance, with FR/SA):
+ *   SIMORG_<I>_BASE_URL, SIMORG_<I>_CLIENT_ID, SIMORG_<I>_CLIENT_SECRET,
+ *   SIMORG_<I>_TOKEN_URL.
+ * Shared fallbacks: SIMORG_TOKEN_URL (token endpoint), SIMORG_SCOPE (scope,
+ * defaulting to "application").
+ */
 export function getInstanceConfig(instance: Instance): InstanceConfig {
   const baseUrl = requireEnv(`SIMORG_${instance}_BASE_URL`).replace(/\/+$/, "");
-  const token = requireEnv(`SIMORG_${instance}_TOKEN`);
+  const clientId = requireEnv(`SIMORG_${instance}_CLIENT_ID`);
+  const clientSecret = requireEnv(`SIMORG_${instance}_CLIENT_SECRET`);
+  const tokenUrl =
+    process.env[`SIMORG_${instance}_TOKEN_URL`] || process.env.SIMORG_TOKEN_URL;
+  if (!tokenUrl) {
+    throw new Error(
+      `Missing token URL: set SIMORG_${instance}_TOKEN_URL or SIMORG_TOKEN_URL`,
+    );
+  }
   return {
     instance,
     baseUrl,
-    token,
-    authHeader: process.env.SIMORG_AUTH_HEADER || "Authorization",
-    authScheme: process.env.SIMORG_AUTH_SCHEME ?? "Bearer ",
+    clientId,
+    clientSecret,
+    tokenUrl,
+    scope: process.env.SIMORG_SCOPE || "application",
   };
 }
 

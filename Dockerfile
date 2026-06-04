@@ -29,5 +29,8 @@ COPY --from=build /app/package.json ./package.json
 COPY --from=build /app/next.config.ts ./next.config.ts
 
 EXPOSE 3000
-# Apply the SQLite schema (idempotent), then start Next.js.
-CMD ["sh", "-c", "npx prisma db push --skip-generate && npm run start"]
+# Default DATABASE_URL if not provided so the container never crashloops on a
+# missing env. NOTE: this path is on the container's ephemeral disk — issued
+# keys are lost on redeploy unless DATABASE_URL points at a mounted volume
+# (e.g. file:/data/simorg.db). Apply the SQLite schema (idempotent), then start.
+CMD ["sh", "-c", "export DATABASE_URL=\"${DATABASE_URL:-file:/app/prisma/prod.db}\"; npx prisma db push --skip-generate && npm run start"]

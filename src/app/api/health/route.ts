@@ -4,11 +4,15 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 // Lightweight liveness probe for Zeabur / uptime checks. Reports which
-// instances are configured without revealing any secrets.
+// instances are configured (OAuth client credentials present) without
+// revealing any secrets.
 export function GET(): Response {
-  const instances = {
-    FR: Boolean(process.env.SIMORG_FR_BASE_URL && process.env.SIMORG_FR_TOKEN),
-    SA: Boolean(process.env.SIMORG_SA_BASE_URL && process.env.SIMORG_SA_TOKEN),
-  };
-  return jsonResponse({ status: "ok", instances });
+  const configured = (i: "FR" | "SA") =>
+    Boolean(
+      process.env[`SIMORG_${i}_BASE_URL`] &&
+        process.env[`SIMORG_${i}_CLIENT_ID`] &&
+        process.env[`SIMORG_${i}_CLIENT_SECRET`] &&
+        (process.env[`SIMORG_${i}_TOKEN_URL`] || process.env.SIMORG_TOKEN_URL),
+    );
+  return jsonResponse({ status: "ok", instances: { FR: configured("FR"), SA: configured("SA") } });
 }
