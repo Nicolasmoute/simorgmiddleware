@@ -38,3 +38,26 @@ export function buildForwardHeaders(incoming: Headers): Headers {
   });
   return out;
 }
+
+// Upstream response headers we must not relay verbatim. `content-encoding` is
+// dropped because the runtime's fetch already decompresses the body, so the
+// bytes we forward are identity-encoded; `content-length` is recomputed by the
+// runtime; `set-cookie` would leak SimOrg's session cookies to clients.
+const STRIP_RESPONSE = new Set([
+  "content-encoding",
+  "content-length",
+  "transfer-encoding",
+  "connection",
+  "keep-alive",
+  "set-cookie",
+]);
+
+/** Relay an upstream response's headers, dropping unsafe/stale ones. */
+export function buildResponseHeaders(upstream: Headers): Headers {
+  const out = new Headers();
+  upstream.forEach((value, key) => {
+    if (STRIP_RESPONSE.has(key.toLowerCase())) return;
+    out.set(key, value);
+  });
+  return out;
+}

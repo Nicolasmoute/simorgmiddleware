@@ -1,5 +1,5 @@
 import { authenticateRequest } from "./auth-key";
-import { buildForwardHeaders, jsonResponse } from "./http";
+import { buildForwardHeaders, buildResponseHeaders, jsonResponse } from "./http";
 import {
   getInstanceConfig,
   parseInstanceParam,
@@ -19,12 +19,15 @@ import { isMethodAllowed, requiredScope } from "./scope";
 const INSTANCE_QUERY_PARAM = "instance";
 const INSTANCE_HEADER = "x-simorg-instance";
 const METHODS_WITHOUT_BODY = new Set(["GET", "HEAD"]);
+// Statuses that must not carry a response body (per the Fetch spec). Passing
+// even an empty ArrayBuffer for these makes the Response constructor throw.
+const NULL_BODY_STATUSES = new Set([101, 103, 204, 205, 304]);
 
 interface ForwardResult {
   instance: Instance;
   status: number;
   ok: boolean;
-  contentType: string;
+  headers: Headers;
   bodyBytes: ArrayBuffer;
 }
 
@@ -43,18 +46,19 @@ async function forwardToInstance(
   const upstreamHeaders = new Headers(headers);
   upstreamHeaders.set(cfg.authHeader, `${cfg.authScheme}${cfg.token}`);
 
+  // Follow redirects (default): `redirect: "manual"` would yield an opaque
+  // response (status 0, empty body) and silently corrupt any 3xx from SimOrg.
   const resp = await fetch(target, {
     method,
     headers: upstreamHeaders,
     body,
-    redirect: "manual",
   });
 
   return {
     instance,
     status: resp.status,
     ok: resp.ok,
-    contentType: resp.headers.get("content-type") ?? "application/octet-stream",
+    headers: resp.headers,
     bodyBytes: await resp.arrayBuffer(),
   };
 }
@@ -62,7 +66,7 @@ async function forwardToInstance(
 function parseBody(result: ForwardResult): unknown {
   const text = new TextDecoder().decode(result.bodyBytes);
   if (!text) return null;
-  if (result.contentType.includes("application/json")) {
+  if ((result.headers.get("content-type") ?? "").includes("application/json")) {
     try {
       return JSON.parse(text);
     } catch {
@@ -138,16 +142,14 @@ export async function handleProxy(req: Request, pathSegments: string[]): Promise
     );
   }
 
-  // 5a. Single instance: mirror SimOrg's response faithfully.
+  // 5a. Single instance: mirror SimOrg's response faithfully, relaying its
+  // status and headers (e.g. Location, pagination) minus unsafe/stale ones.
   if (instanceParam !== "ALL") {
     const r = results[0];
-    return new Response(r.bodyBytes, {
-      status: r.status,
-      headers: {
-        "content-type": r.contentType,
-        "x-simorg-instance": r.instance,
-      },
-    });
+    const headers = buildResponseHeaders(r.headers);
+    headers.set("x-simorg-instance", r.instance);
+    const body = NULL_BODY_STATUSES.has(r.status) ? null : r.bodyBytes;
+    return new Response(body, { status: r.status, headers });
   }
 
   // 5b. ALL: parse JSON from each instance and merge, tagging by instance.
