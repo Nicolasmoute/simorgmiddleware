@@ -1,0 +1,49 @@
+// SimOrg Middleware data model.
+//
+// Stores the users who can sign in (via Microsoft SSO, added in the next
+// milestone) and the API keys they are issued. Access control lives entirely
+// on the ApiKey: `scope` gates read vs. write, `blocked` and `expiresAt` gate
+// validity. The SimOrg instance (FR/SA/ALL) is chosen per request, not per key.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  // Admins can grant WRITE scope and block keys. Seeded from ADMIN_EMAILS.
+  isAdmin   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  apiKeys   ApiKey[]
+}
+
+model ApiKey {
+  id    String @id @default(cuid())
+  label String
+
+  // SHA-256 hash of the issued key; the plaintext is shown only once at
+  // creation. `keyPrefix` is a non-secret fragment shown in listings.
+  keyHash   String @unique
+  keyPrefix String
+
+  // "READ" (default) or "WRITE". Only admins may issue/upgrade to WRITE.
+  scope String @default("READ")
+
+  // Admin kill-switch and expiry (self-service keys default to 3 months).
+  blocked    Boolean   @default(false)
+  expiresAt  DateTime?
+  lastUsedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  @@index([userId])
+}
