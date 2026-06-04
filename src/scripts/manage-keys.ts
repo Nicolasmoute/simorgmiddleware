@@ -13,11 +13,17 @@ if (existsSync(".env")) {
 }
 
 import { prisma } from "../lib/db";
-import { generateApiKey } from "../lib/auth-key";
-import { isScope, type Scope } from "../lib/scope";
+import {
+  issueKey,
+  listKeys,
+  setKeyScope,
+  setKeyBlocked,
+  revokeKey,
+} from "../lib/keys";
 
-// Operational CLI for users and API keys. This is the stand-in for the admin
-// UI (deferred to the next milestone). Run via: `npm run keys <command>`.
+// Operational CLI for users and API keys. Stands in for the admin UI; the
+// key operations share their logic with the /api/admin/keys HTTP API.
+// Run via: `npm run keys <command>`.
 //
 // Commands:
 //   seed                                 Create admin users from ADMIN_EMAILS
@@ -28,6 +34,7 @@ import { isScope, type Scope } from "../lib/scope";
 //   key:scope <keyId> READ|WRITE         Change a key's scope (admin action)
 //   key:block <keyId>                    Block a key
 //   key:unblock <keyId>                  Unblock a key
+//   key:revoke <keyId>                   Permanently delete a key
 
 type Flags = Record<string, string | boolean>;
 
@@ -50,12 +57,6 @@ function parseArgs(argv: string[]): { positionals: string[]; flags: Flags } {
     }
   }
   return { positionals, flags };
-}
-
-function addMonths(date: Date, months: number): Date {
-  const d = new Date(date);
-  d.setMonth(d.getMonth() + months);
-  return d;
 }
 
 async function seed(): Promise<void> {
@@ -100,70 +101,49 @@ async function userList(): Promise<void> {
 }
 
 async function keyCreate(flags: Flags): Promise<void> {
-  const email = String(flags.email ?? "").trim().toLowerCase();
-  const label = String(flags.label ?? "").trim();
-  if (!email || !label) {
-    throw new Error('Usage: key:create --email <e> --label <l> [--scope READ|WRITE] [--months N]');
-  }
-
-  const scopeRaw = String(flags.scope ?? "READ").toUpperCase();
-  if (!isScope(scopeRaw)) throw new Error(`Invalid scope "${scopeRaw}". Use READ or WRITE.`);
-  const scope: Scope = scopeRaw;
-
-  const months = flags.months
-    ? Number(flags.months)
-    : Number(process.env.DEFAULT_KEY_LIFETIME_MONTHS ?? "3");
-  if (!Number.isFinite(months) || months <= 0) {
-    throw new Error(`Invalid --months value: ${flags.months}`);
-  }
-
-  const user = await prisma.user.findUnique({ where: { email } });
-  if (!user) throw new Error(`No user with email ${email}. Create one with user:add first.`);
-
-  const { plaintext, keyHash, keyPrefix } = generateApiKey();
-  const expiresAt = addMonths(new Date(), months);
-
-  const key = await prisma.apiKey.create({
-    data: { label, keyHash, keyPrefix, scope, expiresAt, userId: user.id },
+  const issued = await issueKey({
+    email: String(flags.email ?? ""),
+    label: String(flags.label ?? ""),
+    scope: flags.scope ? String(flags.scope) : undefined,
+    months: flags.months ? Number(flags.months) : undefined,
   });
 
   console.log("");
   console.log("  API key created. Copy it now — it will NOT be shown again:");
   console.log("");
-  console.log(`    ${plaintext}`);
+  console.log(`    ${issued.plaintext}`);
   console.log("");
-  console.log(`  id=${key.id} scope=${scope} expires=${expiresAt.toISOString()}`);
-  console.log(`  owner=${email}`);
+  console.log(`  id=${issued.id} scope=${issued.scope} expires=${issued.expiresAt.toISOString()}`);
+  console.log(`  owner=${issued.email}`);
   console.log("");
 }
 
 async function keyList(flags: Flags): Promise<void> {
-  const email = flags.email ? String(flags.email).trim().toLowerCase() : undefined;
-  const keys = await prisma.apiKey.findMany({
-    where: email ? { user: { email } } : undefined,
-    orderBy: { createdAt: "desc" },
-    include: { user: true },
-  });
+  const keys = await listKeys(flags.email ? String(flags.email) : undefined);
   for (const k of keys) {
-    const status = k.blocked ? "BLOCKED" : k.expiresAt && k.expiresAt < new Date() ? "EXPIRED" : "active";
     console.log(
-      `${k.id}  ${k.keyPrefix}…  ${k.scope.padEnd(5)}  ${status.padEnd(7)}  ${k.user.email}  "${k.label}"  exp=${k.expiresAt?.toISOString() ?? "never"}`,
+      `${k.id}  ${k.keyPrefix}…  ${k.scope.padEnd(5)}  ${k.status.padEnd(7)}  ${k.email}  "${k.label}"  exp=${k.expiresAt ?? "never"}`,
     );
   }
   if (keys.length === 0) console.log("(no keys)");
 }
 
 async function keyScope(keyId: string, scopeRaw: string): Promise<void> {
-  const scope = (scopeRaw ?? "").toUpperCase();
-  if (!isScope(scope)) throw new Error("Usage: key:scope <keyId> READ|WRITE");
-  const key = await prisma.apiKey.update({ where: { id: keyId }, data: { scope } });
-  console.log(`✓ ${key.id} scope set to ${key.scope}`);
+  if (!keyId) throw new Error("Usage: key:scope <keyId> READ|WRITE");
+  await setKeyScope(keyId, scopeRaw ?? "");
+  console.log(`✓ ${keyId} scope set to ${(scopeRaw ?? "").toUpperCase()}`);
 }
 
 async function keyBlock(keyId: string, blocked: boolean): Promise<void> {
   if (!keyId) throw new Error(`Usage: key:${blocked ? "block" : "unblock"} <keyId>`);
-  const key = await prisma.apiKey.update({ where: { id: keyId }, data: { blocked } });
-  console.log(`✓ ${key.id} blocked=${key.blocked}`);
+  await setKeyBlocked(keyId, blocked);
+  console.log(`✓ ${keyId} blocked=${blocked}`);
+}
+
+async function keyRevoke(keyId: string): Promise<void> {
+  if (!keyId) throw new Error("Usage: key:revoke <keyId>");
+  await revokeKey(keyId);
+  console.log(`✓ ${keyId} revoked`);
 }
 
 async function main(): Promise<void> {
@@ -195,6 +175,9 @@ async function main(): Promise<void> {
     case "key:unblock":
       await keyBlock(positionals[0], false);
       break;
+    case "key:revoke":
+      await keyRevoke(positionals[0]);
+      break;
     default:
       console.log(
         [
@@ -210,6 +193,7 @@ async function main(): Promise<void> {
           "  key:scope <keyId> READ|WRITE",
           "  key:block <keyId>",
           "  key:unblock <keyId>",
+          "  key:revoke <keyId>",
         ].join("\n"),
       );
   }

@@ -12,10 +12,11 @@ It **mirrors the SimOrg API verbatim**, adding exactly one control: an
 
 > **Status — milestone 1 (this repo): core proxy + auth.**
 > Implemented: generic FR/SA/ALL reverse proxy, API-key authentication,
-> READ/WRITE scope enforcement, the SQLite/Prisma data model, and a key
-> management CLI.
+> READ/WRITE scope enforcement, the SQLite/Prisma data model, a key
+> management CLI, and a token-secured admin API for issuing/managing keys.
 > **Deferred to milestone 2:** Microsoft SSO sign-in (NextAuth v5), the
-> self-service 3-month token page, and the admin console UI.
+> self-service 3-month token page, and the admin console UI (which will reuse
+> the admin API below).
 
 ## How it works
 
@@ -86,8 +87,49 @@ Until the admin UI lands, manage users and keys with `npm run keys`:
 | `key:list [--email <e>]` | List keys (never shows secrets) |
 | `key:scope <keyId> READ\|WRITE` | Change a key's scope |
 | `key:block <keyId>` / `key:unblock <keyId>` | Block / unblock a key |
+| `key:revoke <keyId>` | Permanently delete a key |
 
 Read-only keys default to a 3-month lifetime (`DEFAULT_KEY_LIFETIME_MONTHS`).
+
+## Admin API (token-secured)
+
+Two planes of access secure the middleware:
+
+- **Data plane** — every `/api/simorg/*` call requires a per-user API key
+  (above), scoped READ/WRITE.
+- **Control plane** — issuing/managing those keys. While SSO is deferred, the
+  admin endpoints are guarded by a single shared secret, **`ADMIN_TOKEN`**
+  (set in env; see `.env.example`). Send it as `x-admin-token: <token>` or
+  `Authorization: Bearer <token>`. If `ADMIN_TOKEN` is unset the admin API is
+  disabled (503). When SSO lands, these endpoints move behind per-admin
+  sessions and the same logic is reused.
+
+| Method & path | Body | Action |
+| --- | --- | --- |
+| `POST /api/admin/keys` | `{ email, label, scope?, months? }` | Issue a key — returns the secret **once** |
+| `GET /api/admin/keys?email=` | — | List keys (no secrets) |
+| `PATCH /api/admin/keys/:id` | `{ scope?, blocked? }` | Change scope and/or block |
+| `DELETE /api/admin/keys/:id` | — | Revoke (delete) a key |
+
+```bash
+# Issue a read-only key for a user
+curl -X POST "https://<host>/api/admin/keys" \
+  -H "x-admin-token: $ADMIN_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{ "email": "pilot@sim.aero", "label": "reporting", "scope": "READ" }'
+
+# Grant write access, then block a key
+curl -X PATCH "https://<host>/api/admin/keys/<id>" \
+  -H "x-admin-token: $ADMIN_TOKEN" -H "Content-Type: application/json" \
+  -d '{ "scope": "WRITE" }'
+curl -X PATCH "https://<host>/api/admin/keys/<id>" \
+  -H "x-admin-token: $ADMIN_TOKEN" -H "Content-Type: application/json" \
+  -d '{ "blocked": true }'
+```
+
+> The `ADMIN_TOKEN` is powerful (it can grant WRITE keys). Use a long random
+> value (`openssl rand -hex 32`), keep it out of the repo, and rotate it by
+> changing the env var and redeploying.
 
 ## Configuration
 
@@ -100,6 +142,7 @@ See [`.env.example`](./.env.example). Key variables:
 | `SIMORG_FR_TOKEN` / `SIMORG_SA_TOKEN` | Full-access SimOrg token per instance (server-side only) |
 | `SIMORG_AUTH_HEADER` / `SIMORG_AUTH_SCHEME` | How tokens are presented to SimOrg (default `Authorization: Bearer …`) |
 | `ADMIN_EMAILS` | Comma-separated admin emails |
+| `ADMIN_TOKEN` | Shared secret guarding `/api/admin/*` (unset ⇒ admin API disabled) |
 | `DEFAULT_KEY_LIFETIME_MONTHS` | Default key lifetime (3) |
 
 ## Deploying to Zeabur
