@@ -233,7 +233,9 @@ async function handleCall(args) {
   }
   const text = await resp.text();
   const header = `HTTP ${resp.status} ${resp.statusText} (instance=${resp.headers.get("x-simorg-instance") || instance})`;
-  const result = `${header}\n${text.length > 12000 ? text.slice(0, 12000) + "\n…(truncated)" : text}`;
+  // Return the full body verbatim — never truncate. These are database query
+  // results; dropping rows would silently corrupt anything reasoning over them.
+  const result = `${header}\n${text}`;
   return resp.ok ? textResult(result) : errorResult(result);
 }
 
