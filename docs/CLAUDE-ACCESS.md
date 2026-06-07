@@ -47,7 +47,25 @@ Rules:
 - **Auth** = `Authorization: Bearer smk_…` (or `x-api-key`).
 - A READ key can only `GET`; writes return `403` until an admin grants `WRITE`.
 
-## 3. Use it from Claude (MCP server)
+## 3a. Use it from Claude — remote connector (no repo needed)
+
+The middleware hosts a remote MCP endpoint at **`https://simorgmiddleware.zeabur.app/mcp`**
+(Streamable HTTP / JSON-RPC). It exposes the same three tools and reuses all the
+proxy's auth, scope, instance routing, and ALL-merge logic. The API key is taken
+from `Authorization: Bearer <key>`, `x-api-key`, or a `?key=` URL parameter.
+
+This is the way to use SimOrg from a **Claude cowork / Claude.ai** session or any
+Claude that isn't running in this repo.
+
+- **Claude.ai / cowork** — add a custom connector with the URL (key in the URL so
+  no header config is needed):
+  `https://simorgmiddleware.zeabur.app/mcp?key=smk_YOUR_KEY`
+- **Claude Code** —
+  `claude mcp add --transport http simorg https://simorgmiddleware.zeabur.app/mcp --header "Authorization: Bearer smk_YOUR_KEY"`
+
+The key is read-only by default, so the connector can only `GET`.
+
+## 3b. Use it from Claude — local stdio server (in this repo)
 
 The [`mcp/`](../mcp) folder is a small MCP server that turns the middleware into
 tools, handling auth and the instance selector for you. Tools:
