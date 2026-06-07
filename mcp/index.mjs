@@ -198,11 +198,22 @@ async function handleCall(args) {
   }
   const path = String(args.path || "").replace(/^\/+/, "");
   if (!path) return errorResult("path is required, e.g. /api/v1/classrooms");
+  // Defensive: keep calls within the SimOrg path space (no `..` traversal to
+  // other middleware routes such as /api/admin).
+  if (path.split("/").includes("..")) {
+    return errorResult("path must not contain '..' segments.");
+  }
 
   const url = new URL(`${BASE_URL}/api/simorg/${path}`);
   url.searchParams.set("instance", instance);
   for (const [k, v] of Object.entries(args.query || {})) {
-    if (v !== undefined && v !== null) url.searchParams.set(k, String(v));
+    if (v === undefined || v === null) continue;
+    // Repeat the key for array values (e.g. ids=1&ids=2) rather than stringify.
+    if (Array.isArray(v)) {
+      for (const item of v) url.searchParams.append(k, String(item));
+    } else {
+      url.searchParams.set(k, String(v));
+    }
   }
 
   const init = {
