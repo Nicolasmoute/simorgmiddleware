@@ -1,0 +1,5217 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Simorg API",
+        "description": "",
+        "contact": {
+            "email": "info@simorg.aero"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "host": "simaero.simorg.aero",
+    "basePath": "/api",
+    "schemes": [
+        "https"
+    ],
+    "paths": {
+        "/v1/report/activities": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "summary": "List Of Activity",
+                "operationId": "activity",
+                "parameters": [
+                    {
+                        "name": "startDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-20",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "endDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-21",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Ex: draft",
+                        "required": false,
+                        "type": "enum",
+                        "enum": [
+                            "draft",
+                            "to_be_signed",
+                            "final"
+                        ]
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "description": "Defined in Admin > General > Activity Types",
+                        "required": false,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List Of activities"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/report/all_sessions": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "summary": "List Of All Sfls",
+                "operationId": "training_hours",
+                "parameters": [
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "description": "Ex: 2020-03-20",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "description": "Ex: 2020-03-21",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List Of All Sfls"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/classrooms": {
+            "get": {
+                "tags": [
+                    "general"
+                ],
+                "summary": "List Of classrooms",
+                "operationId": "classrooms",
+                "responses": {
+                    "200": {
+                        "description": "List Of classrooms"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/customer/create": {
+            "post": {
+                "tags": [
+                    "customer"
+                ],
+                "summary": "Create new customer",
+                "operationId": "createcustomer",
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/CustomerResource"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid tag value"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/v1/customer/update/{customer_no}": {
+            "put": {
+                "tags": [
+                    "customer"
+                ],
+                "summary": "Update customer",
+                "operationId": "updateCustomer",
+                "parameters": [
+                    {
+                        "name": "customer_no",
+                        "in": "path",
+                        "description": "Customer No",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/CustomerUpdateResource"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid tag value"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/v1/counters": {
+            "get": {
+                "tags": [
+                    "general"
+                ],
+                "summary": "List Of Counters",
+                "operationId": "counters",
+                "parameters": [
+                    {
+                        "name": "device",
+                        "in": "query",
+                        "description": "Device Id",
+                        "required": false,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List Of Counters"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/report/cpars": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "summary": "List Of Cpars",
+                "operationId": "cpar",
+                "parameters": [
+                    {
+                        "name": "startDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-20",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "endDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-21",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Ex: open",
+                        "required": false,
+                        "type": "enum",
+                        "enum": [
+                            "open",
+                            "overdue",
+                            "archive"
+                        ]
+                    },
+                    {
+                        "name": "priority",
+                        "in": "query",
+                        "description": "Defined in Admin > General > Cpar Priority",
+                        "required": false,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List Of cpars"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/devices/{id}/service-requests": {
+            "get": {
+                "tags": [
+                    "parts"
+                ],
+                "summary": "Retrieve SRs for a specific device",
+                "description": "Retrieve a paginated list of SRs for a specific device with an optional search term",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the device",
+                        "required": true,
+                        "type": "integer",
+                        "example": 1
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "type": "integer",
+                        "default": 1,
+                        "example": 1
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "type": "integer",
+                        "default": 10,
+                        "example": 10
+                    },
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "description": "Search term",
+                        "required": false,
+                        "type": "string",
+                        "example": "part"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "404": {
+                        "description": "Device not found",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Device not found"
+                                },
+                                "errors": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "parts"
+                ],
+                "summary": "Create a new sr for a specific device",
+                "description": "Creates a new sr for a specific device by providing the required fields in the request body.",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the device",
+                        "required": true,
+                        "type": "integer",
+                        "example": 1
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Sr to be created",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "title": {
+                                    "type": "string",
+                                    "example": "New Part Title"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "SR created successfully",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "SR created successfully"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation Errors",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Validation Errors"
+                                },
+                                "errors": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/report/enrollments": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "summary": "List Of Enrollments",
+                "operationId": "enrollments",
+                "parameters": [
+                    {
+                        "name": "courseId",
+                        "in": "query",
+                        "description": "Course Id",
+                        "required": false,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "description": "Start Date",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "description": "End Date",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status",
+                        "required": false,
+                        "type": "enum",
+                        "enum": [
+                            "planned",
+                            "unplanned"
+                        ]
+                    },
+                    {
+                        "name": "company_id",
+                        "in": "query",
+                        "description": "Company Id",
+                        "required": false,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "type": "integer",
+                        "default": 0,
+                        "example": 0
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "type": "integer",
+                        "default": 0,
+                        "example": 0
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List Of Enrollments"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/enrollments/{enrollment_id}": {
+            "get": {
+                "tags": [
+                    "general"
+                ],
+                "summary": "Get Enrollment Details",
+                "operationId": "enrollmentDetails",
+                "parameters": [
+                    {
+                        "name": "enrollment_id",
+                        "in": "path",
+                        "description": "Enrollment ID",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Enrollment Details"
+                    },
+                    "404": {
+                        "description": "Enrollment not found"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/v1/devices": {
+            "get": {
+                "tags": [
+                    "general"
+                ],
+                "summary": "List Of Fstds",
+                "operationId": "fstd",
+                "responses": {
+                    "200": {
+                        "description": "List Of Devices"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/report/gradings": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "summary": "List Of gradinds",
+                "operationId": "gradings",
+                "parameters": [
+                    {
+                        "name": "startDate",
+                        "in": "query",
+                        "description": "Ex: 2024-07-16",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "endDate",
+                        "in": "query",
+                        "description": "Ex: 2024-07-16",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "candidateId",
+                        "in": "query",
+                        "description": "Ex: 1",
+                        "required": true,
+                        "type": "number"
+                    },
+                    {
+                        "name": "enrollmentId",
+                        "in": "query",
+                        "description": "Ex: 120",
+                        "required": false,
+                        "type": "number"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "type": "integer",
+                        "default": 0,
+                        "example": 0
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "type": "integer",
+                        "default": 0,
+                        "example": 0
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List Of gradings"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/report/instructors": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "summary": "List Of Instructors",
+                "operationId": "instructor",
+                "responses": {
+                    "200": {
+                        "description": "List Of Instructors"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/report/instructors/{id}": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "summary": "Get Instructor",
+                "operationId": "instructor_by_id",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Instructor ID",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Instructor"
+                    },
+                    "404": {
+                        "description": "Instructor Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/report/instructor_reservations": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "summary": "List Of All Instructor Reservations",
+                "operationId": "instructor_reservations",
+                "parameters": [
+                    {
+                        "name": "instructor_name",
+                        "in": "query",
+                        "description": "Ex: John Doe",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "instructor_id",
+                        "in": "query",
+                        "description": "Ex: 1",
+                        "required": false,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "description": "Ex: 2020-03-20",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "description": "Ex: 2020-03-21",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "type": "integer",
+                        "default": 0,
+                        "example": 0
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "type": "integer",
+                        "default": 0,
+                        "example": 0
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List Of All Instructor Reservations"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/invoice-billing": {
+            "get": {
+                "tags": [
+                    "Sales Invoice"
+                ],
+                "summary": "List of invoice billing",
+                "operationId": "invoiceBilling",
+                "parameters": [
+                    {
+                        "name": "start",
+                        "in": "query",
+                        "description": "Ex: 2026-01-17",
+                        "required": true,
+                        "type": "string",
+                        "default": "2026-01-17"
+                    },
+                    {
+                        "name": "end",
+                        "in": "query",
+                        "description": "Ex: 2026-02-17",
+                        "required": true,
+                        "type": "string",
+                        "default": "2026-02-17"
+                    },
+                    {
+                        "name": "company",
+                        "in": "query",
+                        "description": "Company ID or multiple IDs comma separated (e.g. 3,2,10)",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "ich_member",
+                        "in": "query",
+                        "description": "ICH Member (No or Yes)",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "internal_order",
+                        "in": "query",
+                        "description": "Internal Order ID",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List Of Invoice Billing"
+                    },
+                    "400": {
+                        "description": "Invalid parameters"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/v1/maintenance/{id}/work_logs": {
+            "post": {
+                "tags": [
+                    "maintenance"
+                ],
+                "summary": "Create Work Log",
+                "operationId": "maintenance",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Maintenance ID",
+                        "required": false,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/WorkLogResource"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Create Work Log"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/maintenance/{id}/counter_read": {
+            "post": {
+                "tags": [
+                    "maintenance"
+                ],
+                "summary": "Read Maintenance Counter Data",
+                "operationId": "maintenance_counter",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Maintenance ID",
+                        "required": false,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/CounterReadResource"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Read a counter"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/maintenance_types": {
+            "get": {
+                "tags": [
+                    "general"
+                ],
+                "summary": "List Of Maintenance Types",
+                "operationId": "maintenance",
+                "responses": {
+                    "200": {
+                        "description": "List Of Maintenance Types"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/report/parts": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "summary": "List Of Parts",
+                "operationId": "parts",
+                "parameters": [
+                    {
+                        "name": "device",
+                        "in": "query",
+                        "description": "Device Id",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List Of Parts"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/report/part_defines": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "summary": "List Of Part Defines",
+                "operationId": "part_defines",
+                "parameters": [
+                    {
+                        "name": "device",
+                        "in": "query",
+                        "description": "Device Id",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List Of Part Defines"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/devices/{id}/installed-parts": {
+            "get": {
+                "tags": [
+                    "parts"
+                ],
+                "summary": "Retrieve installed parts for a device",
+                "description": "Retrieve a paginated list of installed parts for a specific device with optional search term",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the device",
+                        "required": true,
+                        "type": "integer",
+                        "example": 1
+                    },
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "description": "Search term",
+                        "required": false,
+                        "type": "string",
+                        "example": "part"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "type": "integer",
+                        "default": 1,
+                        "example": 1
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "type": "integer",
+                        "default": 10,
+                        "example": 10
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "404": {
+                        "description": "Device not found",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Device not found"
+                                },
+                                "errors": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/parts/conditions": {
+            "get": {
+                "tags": [
+                    "parts"
+                ],
+                "summary": "Retrieve a list of part conditions",
+                "description": "Retrieves a list of all part conditions",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/parts": {
+            "get": {
+                "tags": [
+                    "parts"
+                ],
+                "summary": "Retrieve a list of parts",
+                "description": "Retrieves a paginated list of parts with optional filters and sorting",
+                "parameters": [
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "description": "Search term",
+                        "required": false,
+                        "type": "string",
+                        "example": "engine"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "type": "integer",
+                        "default": 1,
+                        "example": 1
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "type": "integer",
+                        "default": 10,
+                        "example": 10
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sort order (asc or desc)",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "asc",
+                            "desc"
+                        ],
+                        "example": "asc"
+                    },
+                    {
+                        "name": "order",
+                        "in": "query",
+                        "description": "Order by field",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "name",
+                            "created_at",
+                            "id",
+                            "quantity",
+                            "description",
+                            "shelf",
+                            "lane",
+                            "part_number",
+                            "serial_number",
+                            "lot_number"
+                        ],
+                        "example": "id"
+                    },
+                    {
+                        "name": "location_id",
+                        "in": "query",
+                        "description": "Filter by location ID",
+                        "required": false,
+                        "type": "integer",
+                        "example": 1
+                    },
+                    {
+                        "name": "owner_id",
+                        "in": "query",
+                        "description": "Filter by owner ID",
+                        "required": false,
+                        "type": "integer",
+                        "example": 1
+                    },
+                    {
+                        "name": "status_id",
+                        "in": "query",
+                        "description": "Filter by status ID",
+                        "required": false,
+                        "type": "integer",
+                        "example": 1
+                    },
+                    {
+                        "name": "serial_number",
+                        "in": "query",
+                        "description": "Filter by serial number",
+                        "required": false,
+                        "type": "string",
+                        "example": "SN12345"
+                    },
+                    {
+                        "name": "part_number",
+                        "in": "query",
+                        "description": "Filter by part number",
+                        "required": false,
+                        "type": "string",
+                        "example": "PN12345"
+                    },
+                    {
+                        "name": "lot_number",
+                        "in": "query",
+                        "description": "Filter by lot number",
+                        "required": false,
+                        "type": "string",
+                        "example": "LN12345"
+                    },
+                    {
+                        "name": "deviceId",
+                        "in": "query",
+                        "description": "Filter by device ID",
+                        "required": false,
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    {
+                        "name": "only_available",
+                        "in": "query",
+                        "description": "Filter by availability",
+                        "required": false,
+                        "type": "boolean",
+                        "example": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "properties": {
+                                "data": {
+                                    "type": "array"
+                                },
+                                "meta": {
+                                    "properties": {
+                                        "filtered_count": {
+                                            "type": "integer"
+                                        },
+                                        "page": {
+                                            "type": "integer"
+                                        },
+                                        "limit": {
+                                            "type": "integer"
+                                        },
+                                        "total": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation Errors",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Validation Errors"
+                                },
+                                "errors": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/parts/{id}": {
+            "patch": {
+                "tags": [
+                    "parts"
+                ],
+                "summary": "Update a part",
+                "description": "Updates the details of an existing part",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the part to be updated",
+                        "required": true,
+                        "type": "integer",
+                        "example": 1
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Part object that needs to be updated",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "location_id": {
+                                    "type": "integer",
+                                    "example": 1
+                                },
+                                "lane": {
+                                    "type": "string",
+                                    "example": "Lane 1"
+                                },
+                                "shelf": {
+                                    "type": "string",
+                                    "example": "Shelf A"
+                                },
+                                "level": {
+                                    "type": "string",
+                                    "example": "Level 2"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Part updated successfully",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Part updated successfully"
+                                },
+                                "data": {
+                                    "$ref": "#/definitions/Part"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation Errors",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Validation Errors"
+                                },
+                                "errors": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "404": {
+                        "description": "Part not found",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Part not found"
+                                },
+                                "errors": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/parts/{id}/image": {
+            "post": {
+                "tags": [
+                    "parts"
+                ],
+                "summary": "Update part image",
+                "description": "Updates the image of an existing part",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the part to be updated",
+                        "required": true,
+                        "type": "integer",
+                        "example": 1
+                    },
+                    {
+                        "name": "image",
+                        "in": "formData",
+                        "description": "Image file to upload",
+                        "required": true,
+                        "type": "file"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Image uploaded successfully",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Image uploaded successfully"
+                                },
+                                "data": {
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation Errors",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Validation Errors"
+                                },
+                                "errors": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "404": {
+                        "description": "Part not found",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Part not found"
+                                },
+                                "errors": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/parts/{id}/image": {
+            "delete": {
+                "tags": [
+                    "parts"
+                ],
+                "summary": "Delete part image",
+                "description": "Deletes the image of an existing part",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the part whose image is to be deleted",
+                        "required": true,
+                        "type": "integer",
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Image deleted successfully",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Image deleted successfully"
+                                },
+                                "data": {
+                                    "$ref": "#/definitions/Part"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "404": {
+                        "description": "Part not found",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Part not found"
+                                },
+                                "errors": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/parts/movements": {
+            "get": {
+                "tags": [
+                    "parts"
+                ],
+                "summary": "Part movements history",
+                "description": "Part movements history",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "type": "integer",
+                        "default": 1
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Items per page",
+                        "required": false,
+                        "type": "integer",
+                        "default": 10
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "properties": {
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/PartMovementsResource"
+                                    }
+                                },
+                                "meta": {
+                                    "properties": {
+                                        "total": {
+                                            "description": "Total number of records",
+                                            "type": "integer",
+                                            "example": 150
+                                        },
+                                        "page": {
+                                            "description": "Current page",
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "limit": {
+                                            "description": "Records per page",
+                                            "type": "integer",
+                                            "example": 10
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/devices/{id}/remove-part": {
+            "delete": {
+                "tags": [
+                    "parts"
+                ],
+                "summary": "Remove a part",
+                "description": "Removes a part by providing the required fields in the request body.",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the device to be transferred",
+                        "required": true,
+                        "type": "integer",
+                        "example": 1
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Part removal data",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "system_id": {
+                                    "description": "System ID of the part",
+                                    "type": "integer",
+                                    "example": 1
+                                },
+                                "shelf": {
+                                    "description": "Shelf identifier",
+                                    "type": "string",
+                                    "example": "Shelf A"
+                                },
+                                "part_id": {
+                                    "description": "Part ID",
+                                    "type": "integer",
+                                    "example": 1
+                                },
+                                "shelf_life": {
+                                    "description": "Shelf life of the part",
+                                    "type": "string",
+                                    "format": "date",
+                                    "example": "2024-01-01"
+                                },
+                                "condition_id": {
+                                    "description": "Condition ID of the part",
+                                    "type": "integer",
+                                    "example": 2
+                                },
+                                "location_id": {
+                                    "description": "Location ID of the part",
+                                    "type": "integer",
+                                    "example": 3
+                                },
+                                "note": {
+                                    "description": "Optional note",
+                                    "type": "string",
+                                    "example": "Part removed due to expiration"
+                                },
+                                "quantity": {
+                                    "description": "Quantity of parts to remove",
+                                    "type": "integer",
+                                    "example": 5
+                                },
+                                "service_request_id": {
+                                    "description": "Service request ID",
+                                    "type": "integer",
+                                    "example": 4
+                                },
+                                "serial_number": {
+                                    "description": "Optional serial number of the part",
+                                    "type": "string",
+                                    "example": "12345ABC"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Part removed successfully",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Part removed successfully"
+                                },
+                                "data": {
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation Errors",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Validation Errors"
+                                },
+                                "errors": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/devices/{id}/install-part": {
+            "post": {
+                "tags": [
+                    "parts"
+                ],
+                "summary": "Install a part on a device",
+                "description": "Installs a part on a specific device by providing the required fields in the request body.",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the device",
+                        "required": true,
+                        "type": "integer",
+                        "example": 1
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Part installation data",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "system_id": {
+                                    "description": "System ID of the part",
+                                    "type": "integer",
+                                    "example": 1
+                                },
+                                "service_request_id": {
+                                    "description": "Service request ID",
+                                    "type": "integer",
+                                    "example": 123
+                                },
+                                "part_id": {
+                                    "description": "ID of the part to install",
+                                    "type": "integer",
+                                    "example": 456
+                                },
+                                "quantity": {
+                                    "description": "Quantity of parts to install",
+                                    "type": "integer",
+                                    "example": 5
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Part installed successfully",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Part installed successfully"
+                                },
+                                "data": {
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation Errors",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Validation Errors"
+                                },
+                                "errors": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/parts/check-part-installed": {
+            "post": {
+                "tags": [
+                    "parts"
+                ],
+                "summary": "Check if a part is installed on a device",
+                "description": "Checks if a part is installed on a specific device by providing the required fields in the request body.",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Part installation data",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "system_id": {
+                                    "description": "System ID of the part",
+                                    "type": "integer",
+                                    "example": 1
+                                },
+                                "part_id": {
+                                    "description": "ID of the part to install",
+                                    "type": "integer",
+                                    "example": 456
+                                },
+                                "device_id": {
+                                    "description": "ID of the device",
+                                    "type": "integer",
+                                    "example": 1
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Part installed or not",
+                        "schema": {
+                            "properties": {
+                                "data": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "details": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation Errors",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Validation Errors"
+                                },
+                                "errors": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/parts/owners": {
+            "get": {
+                "tags": [
+                    "parts"
+                ],
+                "summary": "Retrieve a list of part owners",
+                "description": "Retrieves a list of all part owners",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/parts/places": {
+            "get": {
+                "tags": [
+                    "parts"
+                ],
+                "summary": "Retrieve a list of places",
+                "description": "Retrieves a list of places with optional filters such as facility ID, part status ID, and device ID",
+                "parameters": [
+                    {
+                        "name": "facility_id",
+                        "in": "query",
+                        "description": "Filter by facility ID",
+                        "required": false,
+                        "type": "integer",
+                        "example": 1
+                    },
+                    {
+                        "name": "part_status_id",
+                        "in": "query",
+                        "description": "Filter by part status ID",
+                        "required": false,
+                        "type": "integer",
+                        "example": 1
+                    },
+                    {
+                        "name": "device_id",
+                        "in": "query",
+                        "description": "Filter by device ID",
+                        "required": false,
+                        "type": "integer",
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation Errors",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Validation Errors"
+                                },
+                                "errors": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/parts/suppliers": {
+            "get": {
+                "tags": [
+                    "parts"
+                ],
+                "summary": "Retrieve a list of suppliers",
+                "description": "Retrieves a list of suppliers with optional filters for category ID and status ID",
+                "parameters": [
+                    {
+                        "name": "category_id",
+                        "in": "query",
+                        "description": "Filter by category ID",
+                        "required": false,
+                        "type": "integer",
+                        "example": 1
+                    },
+                    {
+                        "name": "status_id",
+                        "in": "query",
+                        "description": "Filter by status ID",
+                        "required": false,
+                        "type": "integer",
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation Errors",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Validation Errors"
+                                },
+                                "errors": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/parts/{part_id}/systems": {
+            "get": {
+                "tags": [
+                    "parts"
+                ],
+                "summary": "Retrieve systems for a specific part",
+                "description": "Retrieve systems for a specific part",
+                "parameters": [
+                    {
+                        "name": "part_id",
+                        "in": "path",
+                        "description": "ID of the part",
+                        "required": true,
+                        "type": "integer",
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "404": {
+                        "description": "Device not found",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Part not found"
+                                },
+                                "errors": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/parts/{part_id}/transfer": {
+            "post": {
+                "tags": [
+                    "parts"
+                ],
+                "summary": "Transfer a part",
+                "description": "Perform an action such as 'move' or 'repair' on a part with optional parameters",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "part_id",
+                        "in": "path",
+                        "description": "ID of the part to be transferred",
+                        "required": true,
+                        "type": "integer",
+                        "example": 1
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Transfer details",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "enum": [
+                                        "move",
+                                        "repair"
+                                    ],
+                                    "example": "move"
+                                },
+                                "location_id": {
+                                    "type": "integer",
+                                    "example": 1
+                                },
+                                "repair_location_id": {
+                                    "type": "integer",
+                                    "example": 2
+                                },
+                                "quantity": {
+                                    "type": "integer",
+                                    "example": 10
+                                },
+                                "note": {
+                                    "type": "string",
+                                    "example": "This is a note"
+                                },
+                                "shelf": {
+                                    "type": "string",
+                                    "example": "Shelf A"
+                                },
+                                "condition_id": {
+                                    "type": "integer",
+                                    "example": 3
+                                },
+                                "owner_id": {
+                                    "type": "integer",
+                                    "example": 4
+                                },
+                                "auto_receive": {
+                                    "type": "boolean",
+                                    "example": true
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Action performed successfully",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Action performed successfully"
+                                },
+                                "data": {
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation Errors",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Validation Errors"
+                                },
+                                "errors": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "404": {
+                        "description": "Part not found",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Part not found"
+                                },
+                                "errors": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/report/training_hours": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "summary": "Total number of training hours since initial qualification",
+                "operationId": "training_hours",
+                "responses": {
+                    "200": {
+                        "description": "List Of Total Training Hours"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/report/reception": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "summary": "List of reception checks",
+                "operationId": "reception",
+                "parameters": [
+                    {
+                        "name": "startDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-20",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List Of Receptions"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/report/slot_search": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "summary": "Search slots by date and device Id",
+                "operationId": "slot_search",
+                "parameters": [
+                    {
+                        "name": "resource_id",
+                        "in": "query",
+                        "required": false,
+                        "type": "int64",
+                        "example": 1
+                    },
+                    {
+                        "name": "resource_type",
+                        "in": "query",
+                        "description": "Device or Classroom",
+                        "required": false,
+                        "type": "enum",
+                        "default": "device",
+                        "enum": [
+                            "device",
+                            "classroom"
+                        ]
+                    },
+                    {
+                        "name": "startDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-20",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "endDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-21",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "type": "integer",
+                        "default": 0,
+                        "example": 0
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "type": "integer",
+                        "default": 0,
+                        "example": 0
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List Of Slots",
+                        "schema": {
+                            "$ref": "#/definitions/SearchResult"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Date",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidDate"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/report/authority": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "operationId": "authority",
+                "parameters": [
+                    {
+                        "name": "startDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-20",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "endDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-21",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List Of Slots"
+                    },
+                    "400": {
+                        "description": "Invalid Date",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidDate"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/report/fstd_hardware_update": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "operationId": "fstd_hardware_update",
+                "parameters": [
+                    {
+                        "name": "startDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-20",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "endDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-21",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List Of Slots"
+                    },
+                    "400": {
+                        "description": "Invalid Date",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidDate"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/report/fstd_software_update": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "operationId": "fstd_software_update",
+                "parameters": [
+                    {
+                        "name": "startDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-20",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "endDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-21",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List Of Slots"
+                    },
+                    "400": {
+                        "description": "Invalid Date",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidDate"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/report/airport_update": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "operationId": "airport_update",
+                "parameters": [
+                    {
+                        "name": "startDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-20",
+                        "type": "string"
+                    },
+                    {
+                        "name": "endDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-21",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List Of Slots"
+                    },
+                    "400": {
+                        "description": "Invalid Date",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidDate"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/report/fstd_modifications": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "operationId": "fstd_modifications",
+                "parameters": [
+                    {
+                        "name": "startDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-20",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "endDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-21",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "description": "Ex: SW Upload",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List Of Slots"
+                    },
+                    "400": {
+                        "description": "Invalid Date",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidDate"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/report/ad_sb_screen": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "operationId": "ad_sb_screen",
+                "parameters": [
+                    {
+                        "name": "startDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-20",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "endDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-21",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List Of Slots"
+                    },
+                    "400": {
+                        "description": "Invalid Date",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidDate"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/report/open_defects": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "operationId": "open_defects",
+                "parameters": [
+                    {
+                        "name": "startDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-20",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "endDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-21",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "source",
+                        "in": "query",
+                        "description": "Ex: Customer",
+                        "type": "string"
+                    },
+                    {
+                        "name": "device",
+                        "in": "query",
+                        "description": "Ex: SIM#1",
+                        "type": "string"
+                    },
+                    {
+                        "name": "status[]",
+                        "in": "query",
+                        "description": "status",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List Of Slots"
+                    },
+                    "400": {
+                        "description": "Invalid Date",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidDate"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/report/limitation_board_issues": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "operationId": "limitation_board_issues",
+                "parameters": [
+                    {
+                        "name": "startDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-20",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "endDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-21",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "device",
+                        "in": "query",
+                        "description": "Ex: SIM#1",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List Of Issues"
+                    },
+                    "400": {
+                        "description": "Invalid Date",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidDate"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/report/qtg_list": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "operationId": "qtg_list",
+                "parameters": [
+                    {
+                        "name": "startDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-20",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "endDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-21",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List Of Slots"
+                    },
+                    "400": {
+                        "description": "Invalid Date",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidDate"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/report/accounting": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "operationId": "account_log",
+                "parameters": [
+                    {
+                        "name": "startDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-20",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "endDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-21",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "companyId",
+                        "in": "query",
+                        "description": "Ex: 1",
+                        "required": false,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "resourceType",
+                        "in": "query",
+                        "description": "Ex: FFS, FTD, Classroom",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List Of Slots"
+                    },
+                    "400": {
+                        "description": "Invalid Date",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidDate"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/report/defects": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "operationId": "defects",
+                "parameters": [
+                    {
+                        "name": "startDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-20",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "endDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-21",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "source",
+                        "in": "query",
+                        "description": "Ex: Customer",
+                        "type": "string"
+                    },
+                    {
+                        "name": "device",
+                        "in": "query",
+                        "description": "Ex: SIM#1",
+                        "type": "string"
+                    },
+                    {
+                        "name": "status[]",
+                        "in": "query",
+                        "description": "status",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "type": "integer",
+                        "default": 0,
+                        "example": 0
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "type": "integer",
+                        "default": 0,
+                        "example": 0
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List Of Defects"
+                    },
+                    "400": {
+                        "description": "Invalid Date",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidDate"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/report/preflight_check": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "operationId": "preflight_check",
+                "parameters": [
+                    {
+                        "name": "startDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-20",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "endDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-21",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "device",
+                        "in": "query",
+                        "description": "Ex: SIM#1",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Response of Preflight Check"
+                    },
+                    "400": {
+                        "description": "Invalid Date",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidDate"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/report/devices_with_details": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "summary": "List Of Devices With Details",
+                "operationId": "devices_with_details",
+                "responses": {
+                    "200": {
+                        "description": "List Of Devices"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/report/classrooms": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "summary": "List Of Classrooms",
+                "operationId": "classrooms",
+                "responses": {
+                    "200": {
+                        "description": "List Of Classrooms"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/report/customers": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "summary": "List Of Customers",
+                "operationId": "customers",
+                "parameters": [
+                    {
+                        "name": "customerId",
+                        "in": "query",
+                        "description": "Ex: 1",
+                        "required": false,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List Of Customers"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/report/course_designs": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "summary": "List Of Issued Course Designs",
+                "operationId": "course_designs",
+                "responses": {
+                    "200": {
+                        "description": "List Of Issued Course Designs"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/report/closed_defects": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "operationId": "closed_defects",
+                "parameters": [
+                    {
+                        "name": "startDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-20",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "endDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-21",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "deviceId",
+                        "in": "query",
+                        "description": "Ex: 1",
+                        "required": false,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Ex: 1",
+                        "required": false,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Ex: 1",
+                        "required": false,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List Of Closed Defects"
+                    },
+                    "400": {
+                        "description": "Invalid Date",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidDate"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/request_log": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "summary": "List Of All Requests",
+                "operationId": "request_log",
+                "parameters": [
+                    {
+                        "name": "startDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-20",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "endDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-21",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List Of All Requests"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/slot/create": {
+            "post": {
+                "tags": [
+                    "slot"
+                ],
+                "summary": "Create new reservation slot",
+                "operationId": "createSlot",
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/SflResource"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid tag value"
+                    },
+                    "409": {
+                        "description": "Time Collision",
+                        "schema": {
+                            "$ref": "#/definitions/TimeCollision"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/v1/slot/createMultiple": {
+            "post": {
+                "tags": [
+                    "slot"
+                ],
+                "summary": "Create multiple new reservation slot",
+                "operationId": "createMultiple",
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Body",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "slots": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/SflResource"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid tag value"
+                    },
+                    "409": {
+                        "description": "Time Collision",
+                        "schema": {
+                            "$ref": "#/definitions/TimeCollision"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/v1/slot/updateByReferenceId/{id}": {
+            "put": {
+                "tags": [
+                    "slot"
+                ],
+                "summary": "Update reservation slot",
+                "operationId": "updateSlot",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Reference Id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/SflResource"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid tag value"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/v1/slot/deleteByReferenceId/{id}": {
+            "delete": {
+                "tags": [
+                    "slot"
+                ],
+                "summary": "Deletes a slot",
+                "description": "",
+                "operationId": "deleteSlot",
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "slot reference_id to delete",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Slot not found"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/v1/slot/deleteByReferenceIds": {
+            "delete": {
+                "tags": [
+                    "slot"
+                ],
+                "summary": "Deletes slots",
+                "description": "",
+                "operationId": "deleteSlots",
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "ids[]",
+                        "in": "query",
+                        "description": "reference_ids",
+                        "required": true,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/v1/slot/deleteById/{id}": {
+            "delete": {
+                "tags": [
+                    "slot"
+                ],
+                "summary": "Deletes a slot",
+                "description": "",
+                "operationId": "deleteSlotById",
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "slot id to delete",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Slot not found"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/v1/slot/deleteByIds": {
+            "delete": {
+                "tags": [
+                    "slot"
+                ],
+                "summary": "Deletes slots by ids",
+                "description": "",
+                "operationId": "deleteSlotsByIds",
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "ids[]",
+                        "in": "query",
+                        "description": "ids",
+                        "required": true,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/v1/slot/search": {
+            "get": {
+                "tags": [
+                    "slot"
+                ],
+                "summary": "Search slots by date and device Id",
+                "operationId": "search",
+                "parameters": [
+                    {
+                        "name": "device",
+                        "in": "query",
+                        "required": false,
+                        "type": "int64",
+                        "example": 1
+                    },
+                    {
+                        "name": "startDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-20",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "endDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-21",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List Of Slots",
+                        "schema": {
+                            "$ref": "#/definitions/SearchResult"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Date",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidDate"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/v1/slot/search-paginate": {
+            "get": {
+                "tags": [
+                    "slot"
+                ],
+                "summary": "Search slots by date and device Id",
+                "operationId": "search-paginate",
+                "parameters": [
+                    {
+                        "name": "resource_id",
+                        "in": "query",
+                        "required": false,
+                        "type": "int64",
+                        "example": 1
+                    },
+                    {
+                        "name": "resource_type",
+                        "in": "query",
+                        "description": "Device or Classroom",
+                        "required": false,
+                        "type": "enum",
+                        "default": "device",
+                        "enum": [
+                            "device",
+                            "classroom"
+                        ]
+                    },
+                    {
+                        "name": "startDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-20",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "endDate",
+                        "in": "query",
+                        "description": "Ex: 2020-03-21",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "type": "integer",
+                        "default": 1,
+                        "example": 1
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "type": "integer",
+                        "default": 10,
+                        "example": 10
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List Of Slots",
+                        "schema": {
+                            "$ref": "#/definitions/SearchResult"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Date",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidDate"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/v1/bulkCreateOrDelete": {
+            "post": {
+                "tags": [
+                    "ato"
+                ],
+                "summary": "Create multiple new reservation slot",
+                "operationId": "createMultiple",
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Body",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "slots": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/ReservationSyncResource"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid tag value"
+                    },
+                    "200": {
+                        "description": "Time Collision"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/v1/sales-invoice": {
+            "get": {
+                "tags": [
+                    "Sales Invoice"
+                ],
+                "summary": "List of sales invoice",
+                "operationId": "salesInvoice",
+                "responses": {
+                    "200": {
+                        "description": "List Of Instructors"
+                    },
+                    "400": {
+                        "description": "Invalid tag value"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/v1/sales-invoice/bulk-update-invoice-number": {
+            "post": {
+                "tags": [
+                    "Sales Invoice"
+                ],
+                "summary": "Update Sales Invoice Number",
+                "operationId": "bulkUpdateInvoiceNumber",
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/SalesInvoiceUpdateResource"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid tag value"
+                    },
+                    "409": {
+                        "description": "Time Collision",
+                        "schema": {
+                            "$ref": "#/definitions/TimeCollision"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/v1/sales-invoice/bulk-mark-invoice-paid": {
+            "patch": {
+                "tags": [
+                    "Sales Invoice"
+                ],
+                "summary": "Mark Sales Invoice Paid",
+                "operationId": "bulkMarkInvoicePaid",
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Part object that needs to be updated",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "invoice_ids": {
+                                    "type": "array",
+                                    "example": [
+                                        "1",
+                                        "2"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid tag value"
+                    },
+                    "409": {
+                        "description": "Time Collision",
+                        "schema": {
+                            "$ref": "#/definitions/TimeCollision"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/v1/stocktake": {
+            "get": {
+                "tags": [
+                    "stocktake"
+                ],
+                "summary": "Retrieve a list of stocktake in progress and completed status",
+                "description": "Retrieves all stocktake records",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "properties": {
+                                "data": {
+                                    "type": "array"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation Errors",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Validation Errors"
+                                },
+                                "errors": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/stocktake/counting_filters": {
+            "get": {
+                "tags": [
+                    "stocktake counting filters"
+                ],
+                "summary": "Retrieve a list of stocktake counting filters",
+                "description": "Retrieves a list of all stocktake counting filters",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "properties": {
+                                "data": {
+                                    "type": "array"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation Errors",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Validation Errors"
+                                },
+                                "errors": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/stocktake/{id}/counting": {
+            "get": {
+                "tags": [
+                    "stocktake counting"
+                ],
+                "summary": "Retrieve a stocktake counting report by ID",
+                "description": "Retrieves a stocktake counting report by ID",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Stocktake ID",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "type": "integer",
+                        "default": 1,
+                        "example": 1
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "type": "integer",
+                        "default": 20,
+                        "example": 20
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "properties": {
+                                "data": {
+                                    "type": "array"
+                                },
+                                "meta": {
+                                    "properties": {
+                                        "filtered_count": {
+                                            "type": "integer"
+                                        },
+                                        "page": {
+                                            "type": "integer"
+                                        },
+                                        "limit": {
+                                            "type": "integer"
+                                        },
+                                        "total": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation Errors",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Validation Errors"
+                                },
+                                "errors": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/stocktake/{id}/counting/{part_id}": {
+            "patch": {
+                "tags": [
+                    "stocktake counting"
+                ],
+                "summary": "Update the counting details of a part",
+                "description": "Update the counting details of a part",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Stocktake ID",
+                        "required": true,
+                        "type": "integer",
+                        "example": 1
+                    },
+                    {
+                        "name": "part_id",
+                        "in": "path",
+                        "description": "Part ID",
+                        "required": true,
+                        "type": "integer",
+                        "example": 1
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Part object that needs to be updated",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "counting_quantity_id": {
+                                    "type": "integer",
+                                    "example": 1
+                                },
+                                "new_quantity": {
+                                    "type": "integer",
+                                    "example": 1
+                                },
+                                "reason": {
+                                    "type": "string",
+                                    "example": "Reason for the change"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated successfully",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Updated successfully"
+                                },
+                                "data": {
+                                    "$ref": "#/definitions/Part"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation Errors",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Validation Errors"
+                                },
+                                "errors": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "404": {
+                        "description": "Part not found",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Part not found"
+                                },
+                                "errors": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/usecase/create/{customer_no}": {
+            "post": {
+                "tags": [
+                    "customer"
+                ],
+                "summary": "Create new Use Case",
+                "operationId": "createusecase",
+                "parameters": [
+                    {
+                        "name": "customer_no",
+                        "in": "path",
+                        "description": "Customer No",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/UseCaseResource"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid tag value"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/v1/usecase/update/{use_case_id}": {
+            "put": {
+                "tags": [
+                    "customer"
+                ],
+                "summary": "Update Use Case",
+                "operationId": "updateUseCaseById",
+                "parameters": [
+                    {
+                        "name": "use_case_id",
+                        "in": "path",
+                        "description": "use case id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/UpdateUseCaseResource"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid tag value"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/v1/work_log_types": {
+            "get": {
+                "tags": [
+                    "general"
+                ],
+                "summary": "List Of WorkLog Types",
+                "operationId": "fstd",
+                "responses": {
+                    "200": {
+                        "description": "List Of Work Log Types"
+                    }
+                },
+                "security": [
+                    {
+                        "simorg": [
+                            "application"
+                        ]
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "definitions": {
+        "ClassroomReservationResource": {
+            "properties": {
+                "deviceId": {
+                    "type": "int64",
+                    "example": 1
+                },
+                "plannedStartDateTime": {
+                    "type": "string",
+                    "example": "2020-01-01 00:00:00"
+                },
+                "plannedFinishDateTime": {
+                    "type": "string",
+                    "example": "2020-01-01 03:00:00"
+                },
+                "useCaseId": {
+                    "type": "int64",
+                    "example": 1
+                },
+                "trainingTypes": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "example": "XX"
+                    }
+                },
+                "remark": {
+                    "type": "string",
+                    "example": "1234"
+                },
+                "referenceId": {
+                    "type": "string",
+                    "example": "ab123"
+                },
+                "attendees": {
+                    "type": "array",
+                    "format": "array",
+                    "items": {
+                        "$ref": "#/definitions/ClassroomAttendee"
+                    }
+                },
+                "status": {
+                    "type": "enum",
+                    "enum": [
+                        "confirmed",
+                        "tentative",
+                        "completed",
+                        "no_show",
+                        "break_down"
+                    ],
+                    "example": "confirmed"
+                }
+            },
+            "type": "object",
+            "xml": {
+                "name": "ClassroomReservation"
+            }
+        },
+        "ClassroomReservationResourceCollection": {
+            "properties": {
+                "slots": {
+                    "type": "array",
+                    "format": "array",
+                    "items": {
+                        "$ref": "#/definitions/ClassroomReservationResource"
+                    }
+                }
+            },
+            "type": "object",
+            "xml": {
+                "name": "Sfl"
+            }
+        },
+        "ClassroomAttendee": {
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "John"
+                },
+                "surname": {
+                    "type": "string",
+                    "example": "Doe"
+                },
+                "email": {
+                    "type": "email",
+                    "example": "johndoe@example.com"
+                },
+                "title": {
+                    "type": "enum",
+                    "enum": [
+                        "E",
+                        "I",
+                        "X",
+                        "N",
+                        "C",
+                        "F",
+                        "G",
+                        "O",
+                        "T",
+                        "S",
+                        "AS",
+                        "AI",
+                        "SO",
+                        "CS",
+                        "FS",
+                        "SS"
+                    ],
+                    "example": "I"
+                }
+            },
+            "type": "object",
+            "xml": {
+                "name": "Sfl"
+            }
+        },
+        "CounterReadResource": {
+            "properties": {
+                "counter_id": {
+                    "type": "int64",
+                    "example": 1
+                },
+                "value": {
+                    "type": "int64",
+                    "example": 50
+                }
+            },
+            "type": "object",
+            "xml": {
+                "name": "CounterRead"
+            }
+        },
+        "CustomerResource": {
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "FHY"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "FREEBIRD"
+                },
+                "contract_status": {
+                    "type": "string",
+                    "enum": [
+                        "0",
+                        "1",
+                        "2"
+                    ],
+                    "example": "0"
+                },
+                "country": {
+                    "type": "country",
+                    "example": "DE"
+                },
+                "type": {
+                    "type": "tinyint",
+                    "enum": [
+                        "0",
+                        "1",
+                        "2",
+                        "4"
+                    ],
+                    "example": "1"
+                },
+                "customer_no": {
+                    "type": "string",
+                    "example": "AX124678"
+                },
+                "transportation": {
+                    "type": "string",
+                    "example": "bus"
+                },
+                "domestic": {
+                    "type": "string",
+                    "example": "bus"
+                },
+                "customer_representative": {
+                    "type": "integer",
+                    "example": "1"
+                },
+                "region": {
+                    "type": "string",
+                    "example": "bus"
+                },
+                "address": {
+                    "type": "string",
+                    "example": "bus"
+                },
+                "vat_number": {
+                    "type": "string",
+                    "example": "bus"
+                },
+                "payment_reminder": {
+                    "type": "integer",
+                    "example": "1"
+                },
+                "slot_cancelable_days": {
+                    "type": "integer",
+                    "example": "1"
+                },
+                "canceled_slot_bookable_days": {
+                    "type": "integer",
+                    "example": "1"
+                },
+                "max_cancel_day": {
+                    "type": "integer",
+                    "example": "1"
+                },
+                "portal_booking_range_start": {
+                    "type": "integer",
+                    "example": "1"
+                },
+                "portal_booking_range_end": {
+                    "type": "integer",
+                    "example": "1"
+                },
+                "applicable_devices": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer",
+                        "example": "1"
+                    }
+                }
+            },
+            "type": "object",
+            "xml": {
+                "name": "Customer"
+            }
+        },
+        "CustomerUpdateResource": {
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "FHY"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "FREEBIRD"
+                },
+                "contract_status": {
+                    "type": "string",
+                    "enum": [
+                        "0",
+                        "1",
+                        "2"
+                    ],
+                    "example": "0"
+                },
+                "country": {
+                    "type": "country",
+                    "example": "DE"
+                },
+                "type": {
+                    "type": "tinyint",
+                    "enum": [
+                        "0",
+                        "1",
+                        "2",
+                        "4"
+                    ],
+                    "example": "1"
+                },
+                "transportation": {
+                    "type": "string",
+                    "example": "bus"
+                },
+                "domestic": {
+                    "type": "string",
+                    "example": "bus"
+                },
+                "customer_representative": {
+                    "type": "integer",
+                    "example": "1"
+                },
+                "region": {
+                    "type": "string",
+                    "example": "bus"
+                },
+                "address": {
+                    "type": "string",
+                    "example": "bus"
+                },
+                "vat_number": {
+                    "type": "string",
+                    "example": "bus"
+                },
+                "payment_reminder": {
+                    "type": "integer",
+                    "example": "1"
+                },
+                "slot_cancelable_days": {
+                    "type": "integer",
+                    "example": "1"
+                },
+                "canceled_slot_bookable_days": {
+                    "type": "integer",
+                    "example": "1"
+                },
+                "max_cancel_day": {
+                    "type": "integer",
+                    "example": "1"
+                },
+                "portal_booking_range_start": {
+                    "type": "integer",
+                    "example": "1"
+                },
+                "portal_booking_range_end": {
+                    "type": "integer",
+                    "example": "1"
+                },
+                "applicable_devices": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer",
+                        "example": "1"
+                    }
+                }
+            },
+            "type": "object",
+            "xml": {
+                "name": "Customer"
+            }
+        },
+        "TimeCollision": {
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "Time Collision"
+                },
+                "message": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            },
+            "type": "object"
+        },
+        "InvalidDate": {
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "Validation Errors"
+                },
+                "message": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            },
+            "type": "object"
+        },
+        "PartMovementsResource": {
+            "properties": {
+                "part_created_at": {
+                    "type": "string",
+                    "example": "2020-03-03 11:00:00"
+                },
+                "part_id": {
+                    "type": "int64",
+                    "example": 345
+                },
+                "part_moved_to_location": {
+                    "type": "string",
+                    "example": "Part moved from location Workshop to location East Sim hall"
+                },
+                "repair_location": {
+                    "type": "string",
+                    "example": "Part sent to repair to West Sim hall"
+                }
+            },
+            "type": "object"
+        },
+        "ReservationSyncResource": {
+            "properties": {
+                "deviceId": {
+                    "type": "int64",
+                    "example": 1
+                },
+                "plannedStartDateTime": {
+                    "type": "string",
+                    "example": "2020-01-01 00:00:00"
+                },
+                "plannedFinishDateTime": {
+                    "type": "string",
+                    "example": "2020-01-01 03:00:00"
+                },
+                "useCaseId": {
+                    "type": "int64",
+                    "example": 1
+                },
+                "trainingTypes": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "example": "XX"
+                    }
+                },
+                "remark": {
+                    "type": "string",
+                    "example": "1234"
+                },
+                "referenceId": {
+                    "type": "string",
+                    "example": "ab123"
+                },
+                "attendees": {
+                    "type": "array",
+                    "format": "array",
+                    "items": {
+                        "$ref": "#/definitions/Attendee"
+                    }
+                },
+                "status": {
+                    "type": "enum",
+                    "enum": [
+                        "confirmed",
+                        "tentative",
+                        "completed",
+                        "no_show",
+                        "break_down"
+                    ],
+                    "example": "confirmed"
+                },
+                "motion": {
+                    "type": "string",
+                    "example": "1234"
+                },
+                "type": {
+                    "type": "enum",
+                    "enum": [
+                        "device",
+                        "classroom"
+                    ]
+                }
+            },
+            "type": "object",
+            "xml": {
+                "name": "Sfl"
+            }
+        },
+        "SflResourceCollection": {
+            "properties": {
+                "slots": {
+                    "type": "array",
+                    "format": "array",
+                    "items": {
+                        "$ref": "#/definitions/SflResource"
+                    }
+                }
+            },
+            "type": "object",
+            "xml": {
+                "name": "Sfl"
+            }
+        },
+        "Attendee": {
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "John"
+                },
+                "surname": {
+                    "type": "string",
+                    "example": "Doe"
+                },
+                "email": {
+                    "type": "email",
+                    "example": "johndoe@example.com"
+                },
+                "title": {
+                    "type": "enum",
+                    "enum": [
+                        "E",
+                        "I",
+                        "X",
+                        "N",
+                        "C",
+                        "F",
+                        "G",
+                        "O",
+                        "T",
+                        "S",
+                        "AS",
+                        "AI",
+                        "SO",
+                        "CS",
+                        "FS",
+                        "SS"
+                    ],
+                    "example": "I"
+                },
+                "employee_id": {
+                    "type": "string",
+                    "example": ""
+                }
+            },
+            "type": "object",
+            "xml": {
+                "name": "Sfl"
+            }
+        },
+        "SalesInvoiceUpdateResource": {
+            "properties": {
+                "invoice_id": {
+                    "type": "int",
+                    "example": "42"
+                },
+                "legal_invoice_number": {
+                    "type": "string",
+                    "example": "FAK-25260"
+                },
+                "is_collection_done": {
+                    "type": "int",
+                    "enum": [
+                        "0",
+                        "1"
+                    ],
+                    "example": "0"
+                }
+            },
+            "type": "object",
+            "xml": {
+                "name": "Sales Invoice"
+            }
+        },
+        "SearchResult": {
+            "properties": {
+                "LogId": {
+                    "type": "int64",
+                    "example": 1
+                },
+                "StartDate": {
+                    "type": "string",
+                    "example": "2020-03-03 11:00:00"
+                },
+                "EndDate": {
+                    "type": "string",
+                    "example": "2020-03-03 11:45:00"
+                },
+                "DeviceCode": {
+                    "type": "string",
+                    "example": "SIM 1"
+                },
+                "UseCaseCode": {
+                    "type": "string",
+                    "example": "PGT"
+                },
+                "SlotType": {
+                    "type": "enum",
+                    "enum": [
+                        "Training",
+                        "Maintenance",
+                        "Engineering",
+                        "Evaluation",
+                        "Configuration",
+                        "Out of Service",
+                        "Other"
+                    ],
+                    "example": "Training"
+                },
+                "CompanyName": {
+                    "type": "string",
+                    "example": "IFTC"
+                },
+                "CompanyCode": {
+                    "type": "string",
+                    "example": "IFTC"
+                },
+                "Status": {
+                    "type": "enum",
+                    "enum": [
+                        "CR",
+                        "R",
+                        "CNX",
+                        "C",
+                        "C"
+                    ],
+                    "example": "R"
+                },
+                "sessionUsers": {
+                    "format": "array",
+                    "items": {
+                        "$ref": "#/definitions/SessionUser"
+                    }
+                }
+            },
+            "type": "object"
+        },
+        "SessionUser": {
+            "properties": {
+                "full_name": {
+                    "type": "string",
+                    "example": "John Doe"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "john.doe@example.com"
+                },
+                "position": {
+                    "type": "enum",
+                    "enum": [
+                        "EXAMINER",
+                        "INSTRUCTOR",
+                        "EXAMINER U/S",
+                        "INSTRUCTOR U/S",
+                        "CAPTAIN",
+                        "F/O",
+                        "ENGINEER",
+                        "OBSERVER",
+                        "FLIGHT INSPECTOR",
+                        "STUDENT",
+                        "ATO STUDENTS",
+                        "ATO INSTRUCTORS",
+                        "SO",
+                        "CAPT SPT",
+                        "F/O SPT",
+                        "S/O SPT"
+                    ],
+                    "example": "EXAMINER"
+                },
+                "employee_id": {
+                    "type": "int",
+                    "example": 1
+                }
+            },
+            "type": "object"
+        },
+        "SflResource": {
+            "properties": {
+                "deviceId": {
+                    "type": "int64",
+                    "example": 1
+                },
+                "plannedStartDateTime": {
+                    "type": "string",
+                    "example": "2020-01-01 00:00:00"
+                },
+                "plannedFinishDateTime": {
+                    "type": "string",
+                    "example": "2020-01-01 03:00:00"
+                },
+                "useCaseId": {
+                    "type": "int64",
+                    "example": 1
+                },
+                "trainingTypes": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "example": "XX"
+                    }
+                },
+                "remark": {
+                    "type": "string",
+                    "example": "1234"
+                },
+                "referenceId": {
+                    "type": "string",
+                    "example": "ab123"
+                },
+                "attendees": {
+                    "type": "array",
+                    "format": "array",
+                    "items": {
+                        "$ref": "#/definitions/Attendee"
+                    }
+                },
+                "status": {
+                    "type": "enum",
+                    "enum": [
+                        "confirmed",
+                        "tentative",
+                        "completed",
+                        "no_show",
+                        "break_down"
+                    ],
+                    "example": "confirmed"
+                },
+                "motion": {
+                    "type": "string",
+                    "example": "1234"
+                },
+                "current_session": {
+                    "type": "boolen",
+                    "example": "true"
+                }
+            },
+            "type": "object",
+            "xml": {
+                "name": "Sfl"
+            }
+        },
+        "UpdateUseCaseResource": {
+            "properties": {
+                "descriptor": {
+                    "type": "string",
+                    "example": "Dry Lease"
+                },
+                "code": {
+                    "type": "string",
+                    "example": "FHY"
+                },
+                "type": {
+                    "type": "string",
+                    "example": "DEVICE"
+                },
+                "default_type": {
+                    "type": "String",
+                    "example": "T"
+                },
+                "color": {
+                    "type": "string",
+                    "example": "#acac78"
+                },
+                "currency": {
+                    "type": "string",
+                    "example": "USD"
+                },
+                "payment_type": {
+                    "type": "enum={'P','I'}",
+                    "example": "I"
+                },
+                "devices": {
+                    "type": "array",
+                    "items": {
+                        "type": "int64",
+                        "example": "2"
+                    }
+                },
+                "term": {
+                    "properties": {
+                        "device_usage_type": {
+                            "type": "string",
+                            "example": "FFS"
+                        },
+                        "start_date": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2024-01-01"
+                        },
+                        "end_date": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2025-01-01"
+                        },
+                        "price": {
+                            "type": "number",
+                            "format": "float",
+                            "example": 300
+                        }
+                    },
+                    "type": "object"
+                }
+            },
+            "type": "object",
+            "xml": {
+                "name": "Usecase"
+            }
+        },
+        "UseCaseResource": {
+            "properties": {
+                "descriptor": {
+                    "type": "string",
+                    "example": "Dry Lease"
+                },
+                "code": {
+                    "type": "string",
+                    "example": "FHY"
+                },
+                "type": {
+                    "type": "string",
+                    "example": "DEVICE"
+                },
+                "default_type": {
+                    "type": "String",
+                    "example": "T"
+                },
+                "color": {
+                    "type": "string",
+                    "example": "#acac78"
+                },
+                "currency": {
+                    "type": "string",
+                    "example": "USD"
+                },
+                "payment_type": {
+                    "type": "enum={'P','I'}",
+                    "example": "I"
+                },
+                "devices": {
+                    "type": "array",
+                    "items": {
+                        "type": "int64",
+                        "example": "2"
+                    }
+                },
+                "term": {
+                    "properties": {
+                        "device_usage_type": {
+                            "type": "string",
+                            "example": "FFS"
+                        },
+                        "start_date": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2024-01-01"
+                        },
+                        "end_date": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2025-01-01"
+                        },
+                        "price": {
+                            "type": "number",
+                            "format": "float",
+                            "example": 300
+                        }
+                    },
+                    "type": "object"
+                }
+            },
+            "type": "object",
+            "xml": {
+                "name": "Usecase"
+            }
+        },
+        "WorkLogResource": {
+            "properties": {
+                "type_id": {
+                    "type": "int64",
+                    "example": 1
+                },
+                "status": {
+                    "type": "string",
+                    "example": "success"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "Content of Work Log"
+                },
+                "time_spent": {
+                    "type": "int64",
+                    "example": 120
+                }
+            },
+            "type": "object",
+            "xml": {
+                "name": "WorkLog"
+            }
+        }
+    },
+    "securityDefinitions": {
+        "simorg": {
+            "type": "oauth2",
+            "flow": "application",
+            "tokenUrl": "/api/access_token",
+            "scopes": {
+                "application": "Default Scope"
+            }
+        },
+        "basicAuth": {
+            "type": "basic",
+            "name": "authorization"
+        }
+    }
+}

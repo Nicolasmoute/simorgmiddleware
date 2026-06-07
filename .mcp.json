@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "simorg": {
+      "command": "node",
+      "args": ["mcp/index.mjs"],
+      "env": {
+        "SIMORG_MW_BASE_URL": "https://simorgmiddleware.zeabur.app",
+        "SIMORG_MW_API_KEY": "${SIMORG_MW_API_KEY}",
+        "SIMORG_MW_DEFAULT_INSTANCE": "FR"
+      }
+    }
+  }
+}

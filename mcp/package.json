@@ -1,0 +1,20 @@
+{
+  "name": "simorg-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "MCP server exposing the SimOrg middleware (FR/SA/ALL) as tools for Claude.",
+  "bin": {
+    "simorg-mcp": "index.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node index.mjs",
+    "smoke": "node smoke.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0"
+  }
+}

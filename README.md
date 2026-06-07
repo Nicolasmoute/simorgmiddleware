@@ -64,6 +64,11 @@ curl -X POST "https://<host>/api/simorg/<simorg-path>?instance=SA" \
 
 `GET /api/health` reports liveness and which instances are configured.
 
+For a full guide to accessing the data — issuing keys, calling endpoints, the
+endpoint catalog, and the **MCP server for Claude** — see
+[`docs/CLAUDE-ACCESS.md`](./docs/CLAUDE-ACCESS.md). The authoritative SimOrg API
+definition is bundled at [`docs/simorg-openapi.json`](./docs/simorg-openapi.json).
+
 ## Local development
 
 ```bash
