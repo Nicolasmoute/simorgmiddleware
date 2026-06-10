@@ -108,6 +108,62 @@ flowchart LR
 
 ---
 
+## Why so much more "new money" reaches US companies than European ones
+
+A natural question: if Europe *saves more*, why does so much more capital seem to pour into US companies (via pension funds, equity markets, VC)? The answer is **not** aggregate investment — real capital formation is ~22% of GDP in both regions. The gap is entirely in the **financial architecture that channels savings to companies.**
+
+### A note on gross vs net (why "gross saving" looks oddly small)
+Of US **$4.83 T gross saving (2024)**, almost all is **consumption of fixed capital (depreciation) ≈ $4.80 T** — replacing worn-out capital. *Net new* national saving was only **~$36 B**, because the government deficit (−$2.05 T) consumed nearly all private net saving. (Cross-check: gross investment $6.31 T − depreciation $4.80 T = $1.51 T net.) Separately, buying shares on the market is **not** new capital formation — the cash goes to the share's *seller*, not the company. National accounts count only newly-created capital, so most pension/fund "flows into companies" are turnover of the existing wealth stock and capital gains, not fresh corporate funding.
+
+### Four structural pillars of the US capital-channeling advantage
+
+**1. Pensions: funded-and-equity (US) vs pay-as-you-go (most of Europe) — the biggest factor.**
+
+| | Pension assets % of GDP | System |
+|---|---:|---|
+| 🇺🇸 United States | **153%** ($49.1 T, end-2025) | Funded, equity-tilted (401k/IRA) |
+| 🇩🇰 Denmark | 206% | Funded |
+| 🇳🇱 Netherlands | 151% | Funded |
+| 🇫🇷 France / 🇮🇹 Italy / 🇩🇪 Germany / 🇪🇸 Spain | **< 20%** | **Pay-as-you-go (not invested)** |
+
+The US holds **~71% of all OECD pension assets** (and ~65% of global), and that money is **equity-heavy** (7-market average: 48% equities; US above average). In France/Italy/Germany/Spain, pension contributions are **never invested** — they pass straight to today's retirees (Italy spends 15.5% of GDP, France 14.6% on PAYG pensions). The same euro of "retirement saving" builds an equity stockpile in the US and builds nothing on the Continent.
+
+**2. Household portfolios: equity tilt vs cash hoard.**
+- Equities + investment funds: US **~39%** of household financial assets vs euro area ~37% headline — but the euro-area figure is mostly *unlisted/other* equity; the market-traded slice is only ~14% in funds.
+- Currency & deposits: US **~15%** vs euro area **~31%** — Europeans hold roughly **double** the share in bank deposits (the cleanest like-for-like contrast).
+- Pensions & insurance: ~27% in both — but US insurers/pensions hold equities, euro-area insurers hold mostly bonds.
+
+**3. Equity-market depth: ~2.7× deeper in the US.**
+- Stock-market cap: **US ~177% of GDP (2023), ~213% (2024)** vs **euro area/EU ~65%**. Estimated "missing" European market cap ≈ **€19 trillion**.
+
+**4. Risk capital: ~4.5× more venture capital.**
+- VC 2024: **US $209 B** vs **Europe ~$45 B** ($162 B vs ~$47 B in 2023). EU corporate financing is only **~13% market-based** — the rest is bank loans. US firms fund investment via capital markets + retained earnings.
+
+### The twist that ties it together
+US firms are so capital-rich they **return** equity rather than raise it: net nonfinancial-corporate equity issuance was **−$406 B (2024)** and **−$611 B (2023)**; S&P 500 buybacks hit a record **$942 B in 2024**. Meanwhile Europe's surplus saving (~$0.45 T/yr it can't place at home) flows **abroad — substantially into US equities and Treasuries.** Part of what "pours into US companies" is **European savings that had no domestic equity channel.**
+
+> **One sentence:** America doesn't out-*save* Europe — it out-*channels* it. Funded equity pensions + deep stock/VC markets + equity-tilted households turn US savings (and a chunk of Europe's) into corporate risk capital, while Europe's larger savings sit in deposits, government bonds, and PAYG transfers — or leave for the US.
+
+### Supporting figures with sources
+| Metric | 🇺🇸 US | 🇪🇺 Euro area / EU | Source |
+|---|---:|---:|---|
+| Pension assets, % of GDP | 153% | FR/IT/DE/ES < 20% | OECD Pensions at a Glance 2025 (end-2024) |
+| Total retirement assets | $49.1 T (end-2025) | — | ICI Q4 2025 |
+| US share of OECD pension assets | 71% | — | OECD Pension Markets in Focus 2025 |
+| Household assets in equities + funds | ~39% | ~37%* (funds ~14%) | Fed Z.1 B.101; Eurostat/ECB |
+| Household assets in currency & deposits | ~15% | ~31% | Fed Z.1 B.101; Eurostat |
+| Stock-market cap, % of GDP | 177% (’23) / ~213% (’24) | ~65% (’23) | World Bank; AFME |
+| Venture capital, 2024 | $209 B | ~$45 B | PitchBook-NVCA; Atomico |
+| Net NFC equity issuance, 2024 | −$406 B | ~neutral | Fed Z.1 F.103 (FRED NCBCEBA027N) |
+| S&P 500 buybacks, 2024 | $942 B | — | S&P Dow Jones Indices |
+| Corporate financing that is market-based | majority | ~13% | AFME CMU KPIs |
+
+\* Euro-area household equity share is inflated by unlisted/other equity; the deposits contrast (15% vs 31%) is the more robust like-for-like measure.
+
+**Additional sources:** [Fed Z.1 B.101](https://www.federalreserve.gov/releases/z1/20260319/html/b101.htm) · [Eurostat household financial assets](https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Households_-_statistics_on_financial_assets_and_liabilities) · [OECD Pensions at a Glance 2025](https://www.oecd.org/en/publications/2025/11/pensions-at-a-glance-2025_76510fe4/full-report/assets-earmarked-for-retirement_089c3f13.html) · [OECD Pension Markets in Focus 2025](https://www.oecd.org/en/publications/pension-markets-in-focus-2025_b095d0a0-en.html) · [ICI Q4 2025 Retirement Market](https://www.ici.org/statistical-report/ret_25_q4) · [Thinking Ahead Institute Global Pension Assets Study 2025](https://www.thinkingaheadinstitute.org/research-papers/global-pension-assets-study-2025/) · [PitchBook-NVCA Venture Monitor](https://nvca.org/pitchbook-nvca-venture-monitor/) · [Atomico State of European Tech 2024](https://www.stateofeuropeantech.com/) · [World Bank market cap %GDP](https://data.worldbank.org/indicator/CM.MKT.LCAP.GD.ZS?locations=US) · [FRED net equity issuance NCBCEBA027N](https://fred.stlouisfed.org/series/NCBCEBA027N) · [S&P 500 buybacks 2024](https://press.spglobal.com/2025-03-19-S-P-500-Q4-2024-Buybacks-Increase-7-4-and-2024-Expenditure-Sets-New-Record-by-Increasing-18-5) · [AFME CMU KPIs](https://www.afme.eu/publications/reports/)
+
+---
+
 ## ⚠️ Data caveats (read before quoting the numbers)
 
 1. **Stock vs flow.** Foreign-holding *levels* (TIC, ECB i.i.p.) include price/valuation moves, not pure cash purchases. The debt-increase decompositions mix stock changes with flows — treat the domestic/foreign % as **indicative, not exact cash accounting**.
